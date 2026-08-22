@@ -1,0 +1,241 @@
+package com.example.btcontroller
+
+import android.app.AlertDialog
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothProfile
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.view.MotionEvent
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.btcontroller.views.JoystickView
+
+class MainActivity : AppCompatActivity(), BluetoothHidController.Listener {
+
+    private lateinit var hidController: BluetoothHidController
+    private lateinit var statusText: TextView
+
+    // Knop-bitmasker, moet overeenkomen met de volgorde in HidGamepadDescriptor
+    private object ButtonBit {
+        const val A = 1 shl 0
+        const val B = 1 shl 1
+        const val X = 1 shl 2
+        const val Y = 1 shl 3
+        const val L = 1 shl 4
+        const val R = 1 shl 5
+        const val SELECT = 1 shl 6
+        const val START = 1 shl 7
+    }
+
+    private var buttonState = 0
+    private var joyX = 0
+    private var joyY = 0
+    private var hatState = 8 // 8 = neutraal
+
+    // D-pad richting bits om combinaties (bv. up+right) om te zetten naar hat-waarde
+    private var dpadUp = false
+    private var dpadDown = false
+    private var dpadLeft = false
+    private var dpadRight = false
+
+    private val requiredPermissions: Array<String>
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(
+                android.Manifest.permission.BLUETOOTH_CONNECT,
+                android.Manifest.permission.BLUETOOTH_ADVERTISE,
+                android.Manifest.permission.BLUETOOTH_SCAN
+            )
+        } else {
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+    private val permissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        if (results.values.all { it }) {
+            hidController.start()
+        } else {
+            Toast.makeText(this, "Bluetooth-permissies zijn vereist om te werken", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        statusText = findViewById(R.id.statusText)
+        hidController = BluetoothHidController(this, this)
+
+        findViewById<Button>(R.id.connectButton).setOnClickListener { showDevicePicker() }
+
+        setupFaceButtons()
+        setupDpad()
+        setupShoulderButtons()
+        setupJoystick()
+
+        if (hasAllPermissions()) {
+            hidController.start()
+        } else {
+            permissionLauncher.launch(requiredPermissions)
+        }
+    }
+
+    private fun hasAllPermissions(): Boolean = requiredPermissions.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // ---------- UI setup ----------
+
+    private fun setupFaceButtons() {
+        bindButton(R.id.btnA, ButtonBit.A)
+        bindButton(R.id.btnB, ButtonBit.B)
+        bindButton(R.id.btnX, ButtonBit.X)
+        bindButton(R.id.btnY, ButtonBit.Y)
+    }
+
+    private fun setupShoulderButtons() {
+        bindButton(R.id.btnL, ButtonBit.L)
+        bindButton(R.id.btnR, ButtonBit.R)
+        bindButton(R.id.btnSelect, ButtonBit.SELECT)
+        bindButton(R.id.btnStart, ButtonBit.START)
+    }
+
+    /** Koppel een knop zodat hij tijdens indrukken het bit zet en bij loslaten weer wist. */
+    private fun bindButton(viewId: Int, bit: Int) {
+        val button = findViewById<Button>(viewId)
+        button.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    buttonState = buttonState or bit
+                    sendReport()
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    buttonState = buttonState and bit.inv()
+                    sendReport()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun setupDpad() {
+        bindDpadButton(R.id.dpadUp) { pressed -> dpadUp = pressed }
+        bindDpadButton(R.id.dpadDown) { pressed -> dpadDown = pressed }
+        bindDpadButton(R.id.dpadLeft) { pressed -> dpadLeft = pressed }
+        bindDpadButton(R.id.dpadRight) { pressed -> dpadRight = pressed }
+    }
+
+    private fun bindDpadButton(viewId: Int, update: (Boolean) -> Unit) {
+        val button = findViewById<Button>(viewId)
+        button.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    update(true)
+                    recomputeHat()
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    update(false)
+                    recomputeHat()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    /** Zet de 4 losse dpad-richtingen om naar de HID hat-switch waarde (0-7, 8=neutraal). */
+    private fun recomputeHat() {
+        hatState = when {
+            dpadUp && dpadRight -> 1
+            dpadRight && dpadDown -> 3
+            dpadDown && dpadLeft -> 5
+            dpadLeft && dpadUp -> 7
+            dpadUp -> 0
+            dpadRight -> 2
+            dpadDown -> 4
+            dpadLeft -> 6
+            else -> 8
+        }
+        sendReport()
+    }
+
+    private fun setupJoystick() {
+        val joystick = findViewById<JoystickView>(R.id.joystick)
+        joystick.onMoveListener = { x, y ->
+            joyX = x
+            joyY = y
+            sendReport()
+        }
+    }
+
+    private fun sendReport() {
+        hidController.sendReport(buttonState, joyX, joyY, hatState)
+    }
+
+    // ---------- Device picker ----------
+
+    private fun showDevicePicker() {
+        if (!hasAllPermissions()) {
+            permissionLauncher.launch(requiredPermissions)
+            return
+        }
+        val devices = hidController.getBondedDevices().toList()
+        if (devices.isEmpty()) {
+            Toast.makeText(
+                this,
+                "Geen gekoppelde apparaten gevonden. Koppel eerst via Android Bluetooth-instellingen.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+        val names = devices.map { it.name ?: it.address }.toTypedArray()
+        AlertDialog.Builder(this)
+            .setTitle("Kies een apparaat")
+            .setItems(names) { _, which -> connectTo(devices[which]) }
+            .show()
+    }
+
+    private fun connectTo(device: BluetoothDevice) {
+        hidController.connect(device)
+    }
+
+    // ---------- BluetoothHidController.Listener ----------
+
+    override fun onAppRegistered(success: Boolean) {
+        runOnUiThread {
+            statusText.text = if (success) "Klaar om te verbinden" else "Registratie mislukt"
+        }
+    }
+
+    override fun onConnectionStateChanged(device: BluetoothDevice?, state: Int) {
+        runOnUiThread {
+            statusText.text = when (state) {
+                BluetoothProfile.STATE_CONNECTED -> "Verbonden met ${safeDeviceName(device)}"
+                BluetoothProfile.STATE_CONNECTING -> "Verbinden..."
+                BluetoothProfile.STATE_DISCONNECTED -> "Niet verbonden"
+                else -> "Status: $state"
+            }
+        }
+    }
+
+    private fun safeDeviceName(device: BluetoothDevice?): String {
+        return try {
+            device?.name ?: device?.address ?: "onbekend apparaat"
+        } catch (se: SecurityException) {
+            "onbekend apparaat"
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        hidController.stop()
+    }
+}
