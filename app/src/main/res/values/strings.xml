@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">BT Control</string>
+    <string name="splash_tagline">Bluetooth game controller</string>
+
+    <!-- Status -->
+    <string name="status_not_registered">Bezig met opstarten…</string>
+    <string name="status_ready">Klaar om te verbinden</string>
+    <string name="status_register_failed">Registratie mislukt — herstart de app</string>
+    <string name="status_connecting">Verbinden…</string>
+    <string name="status_connected">Verbonden met %1$s</string>
+    <string name="status_disconnected">Niet verbonden</string>
+
+    <!-- Bluetooth kiezer -->
+    <string name="bt_sheet_title">Bluetooth-apparaten</string>
+    <string name="bt_sheet_empty">Geen gekoppelde apparaten gevonden.\nKoppel eerst een apparaat via de systeeminstellingen.</string>
+    <string name="bt_sheet_open_settings">Open Bluetooth-instellingen</string>
+    <string name="bt_connect">Verbinden</string>
+    <string name="bt_disconnect">Verbreken</string>
+    <string name="bt_connected_badge">Verbonden</string>
+
+    <!-- Eigen knoppen -->
+    <string name="custom_buttons_title">Eigen knoppen</string>
+    <string name="custom_add_button">Knop toevoegen</string>
+    <string name="custom_add_title">Nieuwe knop</string>
+    <string name="custom_add_label_hint">Naam (bv. \'Turbo\')</string>
+    <string name="custom_add_confirm">Toevoegen</string>
+    <string name="custom_add_cancel">Annuleren</string>
+    <string name="custom_remove_title">Knop verwijderen?</string>
+    <string name="custom_remove_message">\'%1$s\' wordt verwijderd.</string>
+    <string name="custom_remove_confirm">Verwijderen</string>
+    <string name="custom_limit_reached">Maximaal 8 eigen knoppen bereikt</string>
+
+    <!-- Permissies -->
+    <string name="permission_rationale">Bluetooth-permissies zijn nodig om als controller te werken.</string>
+    <string name="permission_denied">Zonder Bluetooth-permissies kan de app niet functioneren.</string>
+</resources>

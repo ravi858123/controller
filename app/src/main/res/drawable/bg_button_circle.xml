@@ -1,0 +1,17 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#40FFFFFF">
+    <item>
+        <selector>
+            <item android:state_pressed="true">
+                <shape android:shape="oval">
+                    <solid android:color="@color/button_face_pressed" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@color/button_face" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

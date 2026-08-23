@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_root"
+    android:paddingStart="14dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="10dp">
+
+    <!-- ===== Statusbalk bovenaan ===== -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/app_name"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/statusDot"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/bg_status_dot" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:maxWidth="160dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/status_not_registered"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+        <ImageButton
+            android:id="@+id/bluetoothButton"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_icon_button"
+            android:contentDescription="@string/bt_sheet_title"
+            android:padding="8dp"
+            android:src="@drawable/ic_bluetooth"
+            app:tint="@color/brand_blue" />
+
+    </LinearLayout>
+
+    <!-- ===== Eigen knoppen rij ===== -->
+    <HorizontalScrollView
+        android:id="@+id/customButtonsScroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/customButtonsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+
+            <ImageButton
+                android:id="@+id/addCustomButton"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_button_add"
+                android:contentDescription="@string/custom_add_button"
+                android:padding="7dp"
+                android:src="@drawable/ic_add"
+                app:tint="@color/text_secondary" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- ===== Schouderknoppen ===== -->
+    <LinearLayout
+        android:id="@+id/shoulderRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customButtonsScroll">
+
+        <TextView
+            android:id="@+id/btnL"
+            style="@style/FaceButtonSmall"
+            android:layout_width="52dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="L" />
+
+        <TextView
+            android:id="@+id/btnSelect"
+            style="@style/FaceButtonSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="14dp"
+            android:background="@drawable/bg_button_dpad"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:text="Select" />
+
+        <TextView
+            android:id="@+id/btnStart"
+            style="@style/FaceButtonSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_button_dpad"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:text="Start" />
+
+        <TextView
+            android:id="@+id/btnR"
+            style="@style/FaceButtonSmall"
+            android:layout_width="52dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="14dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="R" />
+    </LinearLayout>
+
+    <!-- ===== Linker joystick ===== -->
+    <com.example.btcontroller.views.JoystickView
+        android:id="@+id/joystick"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- ===== D-pad ===== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dpad"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/joystick"
+        android:layout_marginStart="20dp">
+
+        <TextView
+            android:id="@+id/dpadUp"
+            style="@style/FaceButtonSmall"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="▲"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dpadLeft"
+            style="@style/FaceButtonSmall"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="◀"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dpadRight"
+            style="@style/FaceButtonSmall"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="▶"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dpadDown"
+            style="@style/FaceButtonSmall"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_button_dpad"
+            android:text="▼"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ===== Face buttons (A/B/X/Y stijl) ===== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/faceButtons"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/btnY"
+            style="@style/FaceButtonLarge"
+            android:background="@drawable/bg_button_circle"
+            android:text="Y"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btnX"
+            style="@style/FaceButtonLarge"
+            android:background="@drawable/bg_button_circle"
+            android:text="X"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btnB"
+            style="@style/FaceButtonLarge"
+            android:background="@drawable/bg_button_circle"
+            android:text="B"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btnA"
+            style="@style/FaceButtonLarge"
+            android:background="@drawable/bg_button_circle"
+            android:text="A"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

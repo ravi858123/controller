@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon voorgrond: het BT Control logo, ingezet met marges zodat het
+     binnen de veilige zone (center 66dp van 108dp) van het adaptive icon valt. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_logo"
+    android:insetLeft="14%"
+    android:insetRight="14%"
+    android:insetTop="30%"
+    android:insetBottom="30%" />

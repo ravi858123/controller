@@ -1,0 +1,12 @@
+BT Control turns your Android phone into a real Bluetooth HID gamepad. Pair
+it like any other wireless controller with a PC, laptop, or console — no
+companion app on the host, no root required.
+
+Features:
+- Analog joystick, D-pad, and 8 standard face/shoulder buttons
+- Up to 8 custom, user-defined buttons you can add, rename, and remove
+- Pairs with any already-bonded Bluetooth device
+- No trackers, no ads, no non-free dependencies
+
+Note: your phone's Bluetooth chipset must support the HID Device role. Most
+modern Android devices (Android 9 / API 28 and up) do.

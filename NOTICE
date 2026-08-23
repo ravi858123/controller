@@ -1,0 +1,9 @@
+BT Control
+Copyright 2026 BT Control contributors
+
+This product includes software developed as part of the BT Control project
+(https://github.com/example/bt-control).
+
+Icons in app/src/main/res/drawable/ic_bluetooth.xml, ic_add.xml, ic_close.xml,
+ic_check.xml, ic_delete.xml and ic_settings.xml are adapted from the Material
+Design icon set by Google, licensed under the Apache License, Version 2.0.

@@ -1,0 +1,13 @@
+BT Control laat je Android-telefoon werken als een echte Bluetooth HID-
+gamepad. Koppel hem net als elke andere draadloze controller met een pc,
+laptop of console — geen extra app op de host, geen root nodig.
+
+Functies:
+- Analoge joystick, D-pad en 8 standaard knoppen
+- Tot 8 zelf toe te voegen, te hernoemen en te verwijderen eigen knoppen
+- Verbindt met elk al gekoppeld Bluetooth-apparaat
+- Geen trackers, geen advertenties, geen niet-vrije dependencies
+
+Let op: de Bluetooth-chipset van je telefoon moet de HID-Device-rol
+ondersteunen. De meeste moderne Android-toestellen (Android 9 / API 28 en
+hoger) ondersteunen dit.

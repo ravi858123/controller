@@ -1,0 +1,27 @@
+<resources>
+    <!-- Merk / logo -->
+    <color name="ic_launcher_background">#1E63D0</color>
+    <color name="brand_blue">#1E63D0</color>
+    <color name="brand_blue_dark">#12489C</color>
+
+    <!-- Basis (donker thema) -->
+    <color name="bg_root">#101318</color>
+    <color name="bg_surface">#1B1F27</color>
+    <color name="bg_surface_raised">#242A35</color>
+
+    <!-- Tekst -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A6ACB8</color>
+
+    <!-- Knoppen -->
+    <color name="button_face">#2A303C</color>
+    <color name="button_face_pressed">#3A4354</color>
+    <color name="button_accent">#1E63D0</color>
+    <color name="button_custom">#2E7D32</color>
+    <color name="button_custom_pressed">#3E9142</color>
+
+    <!-- Status -->
+    <color name="status_connected">#2ECC71</color>
+    <color name="status_disconnected">#7A8290</color>
+    <color name="status_connecting">#F5A623</color>
+</resources>
